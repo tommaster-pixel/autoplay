@@ -7,9 +7,7 @@
     <script src="https://unpkg.com/aframe-transparent-video-shader@1.0.3/dist/aframe-transparent-video-shader.umd.js"></script>
     <script src="https://rawgit.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
 
-<div id="controls" style="position: absolute; top: 10px; left: 10px;">
-        <button onclick="replayVideo()">Replay</button>
-      </div>
+
  
   
 
@@ -32,33 +30,39 @@
         <a-entity mindar-image-target="targetIndex: 0">
 
  <a-video  material="shader: transparent-video;" src="#mivideo" position="0 0 0"  width="3" height="1.552" rotation="0 0 0"  ></a-video>
- 
-          
-   
       
      </a-entity>
-  
+   <a-entity camera></a-entity>
+
+      <a-entity id="replayButton" position="0 1.5 -4" visible="false">
+        <a-plane color="black" width="1.5" height="0.3"></a-plane>
+        <a-text value="Replay" align="center" color="white" width="4" position="0 0 0.1"
+                event-set__mouseenter="color: red"
+                event-set__mouseleave="color: white"
+                event-set__click="event: click; replay: true"></a-text>
+      </a-entity>
     </a-scene>
-      <script>
+     <script>
       var video = document.querySelector("#mivideo");
       var replayButton = document.querySelector("#replayButton");
 
-      replayButton.addEventListener("click", function() {
-        video.currentTime = 0;
-        video.play();
-        replayButton.style.display = "none";
+      video.addEventListener("loadeddata", function() {
+        replayButton.setAttribute("visible", "true");
       });
 
       video.addEventListener("ended", function() {
-        replayButton.style.display = "block";
+        replayButton.setAttribute("visible", "true");
       });
-    </script>
-     <script>
-      var video = document.querySelector("#mivideo");
+
+      replayButton.addEventListener("click", function() {
+        replayButton.setAttribute("visible", "false");
+        video.currentTime = 0;
+        video.play();
+      });
 
       AFRAME.registerComponent("markerhandler", {
         init: function() {
-          var marker = document.querySelector("#mind");
+          var marker = this.el;
 
           marker.addEventListener("markerFound", function() {
             video.play();
@@ -66,6 +70,7 @@
 
           marker.addEventListener("markerLost", function() {
             video.pause();
+            replayButton.setAttribute("visible", "false");
           });
         }
       });
