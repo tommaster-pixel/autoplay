@@ -51,16 +51,18 @@
       var v = document.querySelector('#mivideo').pause();
   
 })
+     
 document.getElementById("btn4").addEventListener("click", (e)=>{
 
   var v = document.querySelector('#mivideo').play();
 })
 
-document.getElementById("btn1").addEventListener("click", (e)=>{
+document.getElementById("btn1").addEventListener("click", function() {
+  var video = document.querySelector('#mivideo');
+  video.currentTime = 0;
+  video.play();
+});
 
-  var v = document.querySelector('#mivideo').style.display = 'none';
-          video.play();
-})
 
  
 
