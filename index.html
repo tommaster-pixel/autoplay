@@ -11,11 +11,7 @@
         <button onclick="replayVideo()">Replay</button>
       </div>
  
-   <style>
-    .video-container {
-      opacity: 1; /* Set the desired opacity value between 0 and 1 */
-    }
-  </style>
+  
 
 <meta name="apple-mobile-web-app-capable" content="yes">
    
@@ -55,6 +51,23 @@
 
       video.addEventListener("ended", function() {
         replayButton.style.display = "block";
+      });
+    </script>
+     <script>
+      var video = document.querySelector("#mivideo");
+
+      AFRAME.registerComponent("markerhandler", {
+        init: function() {
+          var marker = document.querySelector("#mind");
+
+          marker.addEventListener("markerFound", function() {
+            video.play();
+          });
+
+          marker.addEventListener("markerLost", function() {
+            video.pause();
+          });
+        }
       });
     </script>
   </body>
