@@ -27,21 +27,28 @@
         <a-entity mindar-image-target="targetIndex: 0">
 
  <a-video  material="shader: transparent-video;" src="#mivideo" position="0 0 0"  width="3" height="1.552" rotation="0 0 0"  ></a-video>
-      
-     </a-entity>
-   <a-entity camera></a-entity>
-
-       <a-entity id="replayButton" position="0 1.5 -4" visible="false" scale="0.5 0.5 0.5">
-        <a-plane color="black" width="1.5" height="0.3"></a-plane>
-        <a-text value="Replay" align="center" color="white" width="4" position="0 0 0.1"
-                event-set__mouseenter="color: red"
-                event-set__mouseleave="color: white"
-                event-set__click="event: click; replay: true"></a-text>
+      <a-entity id="playButton" position="0 1.5 -4" visible="true" scale="0.5 0.5 0.5">
+        <a-circle color="black" radius="0.3"></a-circle>
+        <a-triangle color="white" vertex-a="0 0.15 0.01" vertex-b="-0.1 -0.1 0.01" vertex-c="0.1 -0.1 0.01"></a-triangle>
       </a-entity>
+
+      <a-text id="replayButton" value="Replay" position="0 1.5 -4" visible="false"
+              align="center" color="white" width="4"
+              event-set__mouseenter="color: red"
+              event-set__mouseleave="color: white"
+              event-set__click="event: click; replay: true"></a-text>
+     </a-entity>
+  
     </a-scene>
      <script>
       var video = document.querySelector("#mivideo");
+      var playButton = document.querySelector("#playButton");
       var replayButton = document.querySelector("#replayButton");
+
+      playButton.addEventListener("click", function() {
+        playButton.setAttribute("visible", "false");
+        video.play();
+      });
 
       video.addEventListener("loadeddata", function() {
         replayButton.setAttribute("visible", "true");
@@ -62,10 +69,12 @@
           var marker = this.el;
 
           marker.addEventListener("markerFound", function() {
-            video.play();
+            playButton.setAttribute("visible", "true");
+            video.pause();
           });
 
           marker.addEventListener("markerLost", function() {
+            playButton.setAttribute("visible", "false");
             video.pause();
             replayButton.setAttribute("visible", "false");
           });
