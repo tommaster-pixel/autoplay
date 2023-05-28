@@ -8,11 +8,7 @@
     <script src="https://rawgit.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
 
 
-  <div style='position: fixed; top: 10px; width:100%; text-align: center; z-index: 1;'>
-
  
-<button id="replayButton" onclick="replayVideo()">Play Again</button>
-  </div>
    <style>
     .video-container {
       opacity: 1; /* Set the desired opacity value between 0 and 1 */
@@ -28,7 +24,7 @@
     
     	<a-assets>
 
-        <video  id="mivideo"  playsinline webkitplaysinline autoplay  src="mike.webm" type="video/webm" transparent="true"></video>
+        <video  id="mivideo"  playsinline webkitplaysinline  src="mike.webm" type="video/webm" transparent="true"  autoplay ></video>
       </a-assets>
        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
@@ -37,22 +33,36 @@
         
         <a-entity mindar-image-target="targetIndex: 0">
 
- <a-video  material="shader: transparent-video;" src="#mivideo" position="0 0 0"  width="1" height="0.552" rotation="0 0 0"  ></a-video>
+ <a-video  material="shader: transparent-video;" src="#mivideo" position="0 0 0"  width="3" height="1.552" rotation="0 0 0"  ></a-video>
 
+      <div id="controls" style="position: absolute; top: 10px; left: 10px;">
+        <button onclick="replayVideo()">Replay</button>
+      </div>
+          
+    <script>
+      var video = document.querySelector("mivideo");
 
+      function replayVideo() {
+        video.currentTime = 0;
+        video.play();
+      }
 
-  <script>
-    var video = document.getElementById("miVideo");
-    var replayButton = document.getElementById("replayButton");
+      AFRAME.registerComponent("markerhandler", {
+        init: function() {
+          var marker = this.el;
 
-    // Function to replay the video when the button is clicked
-    function replayVideo() {
-      video.currentTime = 0;
-      video.play();
-    }
-  </script>
+          marker.addEventListener("markerFound", function() {
+            video.play();
+          });
+
+          marker.addEventListener("markerLost", function() {
+            video.pause();
+          });
+        }
+      });
+    </script>
       
-       </a-entity>
+     </a-entity>
   
     </a-scene>
   </body>
