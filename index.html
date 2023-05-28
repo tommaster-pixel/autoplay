@@ -6,7 +6,21 @@
     <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.0.0/dist/mindar-image-aframe.prod.js"></script>
     <script src="https://unpkg.com/aframe-transparent-video-shader@1.0.3/dist/aframe-transparent-video-shader.umd.js"></script>
     <script src="https://rawgit.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
-
+<style>
+      #playButton,
+      #replayButton {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
    
@@ -30,56 +44,50 @@
       <a-entity id="playButton" position="0 1.5 -4" visible="true" scale="0.5 0.5 0.5">
         <a-circle color="black" radius="0.3"></a-circle>
         <a-triangle color="white" vertex-a="0 0.15 0.01" vertex-b="-0.1 -0.1 0.01" vertex-c="0.1 -0.1 0.01"></a-triangle>
-      </a-entity>
-
-      <a-text id="replayButton" value="Replay" position="0 1.5 -4" visible="false"
-              align="center" color="white" width="4"
-              event-set__mouseenter="color: red"
-              event-set__mouseleave="color: white"
-              event-set__click="event: click; replay: true"></a-text>
-     </a-entity>
-  
-    </a-scene>
-     <script>
+     <div id="playButton" onclick="playVideo()">Play</div>
+      <div id="replayButton" onclick="replayVideo()" style="display: none;">Replay</div>
+        
+         <script>
       var video = document.querySelector("#mivideo");
       var playButton = document.querySelector("#playButton");
       var replayButton = document.querySelector("#replayButton");
 
-      playButton.addEventListener("click", function() {
-        playButton.setAttribute("visible", "false");
+      function playVideo() {
+        playButton.style.display = "none";
+        replayButton.style.display = "none";
         video.play();
-      });
+      }
 
-      video.addEventListener("loadeddata", function() {
-        replayButton.setAttribute("visible", "true");
-      });
-
-      video.addEventListener("ended", function() {
-        replayButton.setAttribute("visible", "true");
-      });
-
-      replayButton.addEventListener("click", function() {
-        replayButton.setAttribute("visible", "false");
+      function replayVideo() {
+        replayButton.style.display = "none";
         video.currentTime = 0;
         video.play();
-      });
+      }
 
       AFRAME.registerComponent("markerhandler", {
         init: function() {
           var marker = this.el;
 
           marker.addEventListener("markerFound", function() {
-            playButton.setAttribute("visible", "true");
-            video.pause();
+            if (!video.paused) {
+              video.pause();
+              replayButton.style.display = "block";
+            }
           });
 
           marker.addEventListener("markerLost", function() {
-            playButton.setAttribute("visible", "false");
-            video.pause();
-            replayButton.setAttribute("visible", "false");
+            if (!video.paused) {
+              video.pause();
+              replayButton.style.display = "none";
+            }
           });
         }
       });
     </script>
+          </a-entity>
+
+    
+    </a-scene>
+    
   </body>
 </html>
