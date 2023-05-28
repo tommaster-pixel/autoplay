@@ -6,22 +6,11 @@
     <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.0.0/dist/mindar-image-aframe.prod.js"></script>
     <script src="https://unpkg.com/aframe-transparent-video-shader@1.0.3/dist/aframe-transparent-video-shader.umd.js"></script>
     <script src="https://rawgit.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
-<style>
-      #playButton,
-      #replayButton {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #333;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-      }
-    </style>
 
+<div style='position: fixed; top: 10px; width:100%; text-align: center; z-index: 1;'>
+    <button class="button" id="btn4">Play </button>
+    <button class="button" id="btn2">replay</button>
+   </div>
 <meta name="apple-mobile-web-app-capable" content="yes">
    
   </head>
@@ -41,49 +30,27 @@
         <a-entity mindar-image-target="targetIndex: 0">
 
  <a-video  material="shader: transparent-video;" src="#mivideo" position="0 0 0"  width="3" height="1.552" rotation="0 0 0"  ></a-video>
-      <a-entity id="playButton" position="0 1.5 -4" visible="true" scale="0.5 0.5 0.5">
-        <a-circle color="black" radius="0.3"></a-circle>
-        <a-triangle color="white" vertex-a="0 0.15 0.01" vertex-b="-0.1 -0.1 0.01" vertex-c="0.1 -0.1 0.01"></a-triangle>
-     <div id="playButton" onclick="playVideo()">Play</div>
-      <div id="replayButton" onclick="replayVideo()" style="display: none;">Replay</div>
-        
-         <script>
-      var video = document.querySelector("#mivideo");
-      var playButton = document.querySelector("#playButton");
-      var replayButton = document.querySelector("#replayButton");
+     
+          <script> 
 
-      function playVideo() {
-        playButton.style.display = "none";
-        replayButton.style.display = "none";
-        video.play();
-      }
+      var m = document.querySelector("a-entity")
+      m.addEventListener("targetfound", (e)=>{
+      console.log("targetfound")
+      var v = document.querySelector('#mivideo').play();
+   
 
-      function replayVideo() {
-        replayButton.style.display = "none";
-        video.currentTime = 0;
-        video.play();
-      }
+})
+            document.getElementById("btn4").addEventListener("click", (e)=>{
 
-      AFRAME.registerComponent("markerhandler", {
-        init: function() {
-          var marker = this.el;
-
-          marker.addEventListener("markerFound", function() {
-            if (!video.paused) {
-              video.pause();
-              replayButton.style.display = "block";
-            }
-          });
-
-          marker.addEventListener("markerLost", function() {
-            if (!video.paused) {
-              video.pause();
-              replayButton.style.display = "none";
-            }
-          });
-        }
-      });
-    </script>
+  var v = document.querySelector('#mivideo').play();
+})
+            document.getElementById("btn2").addEventListener("click", function() {
+  replayButton.style.display = "none";
+  video.currentTime = 0;
+  video.play();
+              var v = document.querySelector('#mivideo').play();
+});
+             </script>
           </a-entity>
 
     
